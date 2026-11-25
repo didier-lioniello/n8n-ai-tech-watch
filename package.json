@@ -1,0 +1,14 @@
+{
+  "name": "n8n-ai-tech-watch",
+  "version": "1.0.0",
+  "private": true,
+  "description": "n8n workflow: my AI agent turns official AI news feeds into fact-checked post ideas",
+  "scripts": {
+    "build:workflow": "python3 workflow/src/build_workflow.py",
+    "test:code": "node workflow/src/test_code_nodes.js",
+    "test:code:live": "node workflow/src/test_code_nodes.js --live"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

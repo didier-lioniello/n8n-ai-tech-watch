@@ -1,0 +1,1225 @@
+{
+  "name": "AI Tech Watch — official feeds to fact-checked post ideas",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 1. Triggers\n\nA **daily schedule** at 07:00 Europe/Paris, plus a **manual** trigger for on-demand runs.\n\nBoth start the same fan-out: five official RSS/Atom feeds, fetched in parallel.",
+        "width": 280,
+        "height": 360,
+        "color": 5
+      },
+      "id": "bcc31e57-96ed-5648-996e-872fc917cb3a",
+      "name": "Note · Triggers",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 7,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "4ade43d6-6085-57bb-883c-040ee4578233",
+      "name": "Trigger · Schedule (daily 07:00 Paris)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        40,
+        180
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "4689b8fe-f401-552e-919a-ea58178c97ee",
+      "name": "Trigger · Manual",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        40,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 2. Official feeds, in parallel\n\nOpenAI News, Google DeepMind, the Google AI Blog, the Hugging Face Blog, and arXiv cs.AI.\n\nEach request **retries twice** and **continues on failure**. One broken feed must never wipe the digest.\n\nURLs were checked live before being pinned here. There is no unofficial aggregator in this path.",
+        "width": 560,
+        "height": 200,
+        "color": 6
+      },
+      "id": "1d58db2f-0bcc-5724-aaa8-b113f12506b5",
+      "name": "Note · Official feeds",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        260,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://openai.com/news/rss.xml",
+        "options": {}
+      },
+      "id": "047f0285-52b5-51ac-92b8-f4c67185470c",
+      "name": "RSS · OpenAI News",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        280,
+        0
+      ],
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c0337778-f33b-5ff9-abfa-b2ed41adda10",
+              "name": "source_name",
+              "value": "OpenAI News",
+              "type": "string"
+            },
+            {
+              "id": "9ecc1e84-a61b-5bcf-bc71-ad7bf4263b1c",
+              "name": "feed_url",
+              "value": "https://openai.com/news/rss.xml",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "a6fcdb47-85b0-5d9c-81d0-cc01a2e5a1e3",
+      "name": "Tag · OpenAI News",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.deepmind.com/blog/rss.xml",
+        "options": {}
+      },
+      "id": "4d93ef79-6e47-5a49-807e-35994b8ed4b6",
+      "name": "RSS · Google DeepMind",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        280,
+        160
+      ],
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a7258f7c-946c-5525-85c4-11fde39979e6",
+              "name": "source_name",
+              "value": "Google DeepMind",
+              "type": "string"
+            },
+            {
+              "id": "d34f1ff8-617c-59f5-bafa-52f182ae138d",
+              "name": "feed_url",
+              "value": "https://www.deepmind.com/blog/rss.xml",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "fe11ea16-4353-5393-876a-42a550834170",
+      "name": "Tag · Google DeepMind",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://blog.google/technology/ai/rss/",
+        "options": {}
+      },
+      "id": "a901284d-8aa2-50f4-8f87-ca28109515b0",
+      "name": "RSS · Google AI Blog",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        280,
+        320
+      ],
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "46de01e8-c547-5d34-a4ef-5d89c69542dd",
+              "name": "source_name",
+              "value": "Google AI Blog",
+              "type": "string"
+            },
+            {
+              "id": "6a6e4dca-9e8c-59a0-86b2-1da345dd8187",
+              "name": "feed_url",
+              "value": "https://blog.google/technology/ai/rss/",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "9783bde9-0268-5fd0-b116-282b0dc53a3b",
+      "name": "Tag · Google AI Blog",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://huggingface.co/blog/feed.xml",
+        "options": {}
+      },
+      "id": "aab3e1c8-3afe-59ea-856e-85a1b2dcf208",
+      "name": "RSS · Hugging Face Blog",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        280,
+        480
+      ],
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c4b67c06-9218-55f3-be7d-0d5f2ad8cd48",
+              "name": "source_name",
+              "value": "Hugging Face Blog",
+              "type": "string"
+            },
+            {
+              "id": "06c0707c-f08c-5858-880a-cb33574f5437",
+              "name": "feed_url",
+              "value": "https://huggingface.co/blog/feed.xml",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "bcef0190-bb92-5bf3-a6fe-881d0934e5ad",
+      "name": "Tag · Hugging Face Blog",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://rss.arxiv.org/rss/cs.AI",
+        "options": {}
+      },
+      "id": "5e4db168-6f76-51f1-926a-b38fd32dfa94",
+      "name": "RSS · arXiv cs.AI",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        280,
+        640
+      ],
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2d32cbaf-e65e-5480-91dd-d3e9c33fb5ec",
+              "name": "source_name",
+              "value": "arXiv cs.AI",
+              "type": "string"
+            },
+            {
+              "id": "0aef0ae8-c5cb-513d-ab28-883ff4a3871d",
+              "name": "feed_url",
+              "value": "https://rss.arxiv.org/rss/cs.AI",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "5352878e-5bb1-5f8b-95e4-f445818e7bef",
+      "name": "Tag · arXiv cs.AI",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "append",
+        "numberInputs": 5,
+        "options": {}
+      },
+      "id": "1e25a051-ff4f-5130-b537-90a00a789a7c",
+      "name": "Merge · All feeds",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        840,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 3. Normalize, window, score\n\nCanonicalize URLs, drop items older than **48 hours**, dedupe, then keyword-score.\n\nOfficial blog posts in the window are kept. arXiv papers need a minimum score and are capped, so the digest stays readable.",
+        "width": 420,
+        "height": 200,
+        "color": 4
+      },
+      "id": "6d85fb21-cd54-5a6e-8255-3ec6474d732b",
+      "name": "Note · Normalize & score",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "/**\n * Merge every feed item, tag the source, drop unusable rows, dedupe by\n * canonical URL, and keep only items published in the lookback window\n * (default: 48 hours). Failures on a single feed are recorded, not fatal.\n */\nfunction readEnv(name, fallback) {\n  try {\n    const bag = (typeof $env !== 'undefined') ? $env : {};\n    const value = bag[name];\n    if (value == null || value === '') return fallback == null ? '' : fallback;\n    return String(value);\n  } catch {\n    return fallback == null ? '' : fallback;\n  }\n}\n\nconst LOOKBACK_HOURS = Number(readEnv('LOOKBACK_HOURS', '48')) || 48;\nconst cutoffMs = Date.now() - LOOKBACK_HOURS * 60 * 60 * 1000;\n\nconst EXPECTED_FEEDS = [\n  { source_name: 'OpenAI News', feed_url: 'https://openai.com/news/rss.xml', hostIncludes: ['openai.com'] },\n  { source_name: 'Google DeepMind', feed_url: 'https://www.deepmind.com/blog/rss.xml', hostIncludes: ['deepmind.google', 'deepmind.com'] },\n  { source_name: 'Google AI Blog', feed_url: 'https://blog.google/technology/ai/rss/', hostIncludes: ['blog.google'] },\n  { source_name: 'Hugging Face Blog', feed_url: 'https://huggingface.co/blog/feed.xml', hostIncludes: ['huggingface.co'] },\n  { source_name: 'arXiv cs.AI', feed_url: 'https://rss.arxiv.org/rss/cs.AI', hostIncludes: ['arxiv.org'] },\n];\n\nfunction stripHtml(value) {\n  return String(value || '')\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, ' ')\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, ' ')\n    .replace(/<[^>]+>/g, ' ')\n    .replace(/&nbsp;/gi, ' ')\n    .replace(/&amp;/gi, '&')\n    .replace(/&quot;/gi, '\"')\n    .replace(/&#39;/g, \"'\")\n    .replace(/&lt;/gi, '<')\n    .replace(/&gt;/gi, '>')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction canonUrl(raw) {\n  if (!raw) return '';\n  try {\n    const url = new URL(String(raw).trim());\n    url.hash = '';\n    for (const key of [...url.searchParams.keys()]) {\n      if (key.toLowerCase().startsWith('utm_') || key === 'fbclid' || key === 'ref') {\n        url.searchParams.delete(key);\n      }\n    }\n    let href = url.toString();\n    if (href.endsWith('/') && url.pathname !== '/') href = href.slice(0, -1);\n    url.protocol = 'https:';\n    href = url.toString();\n    if (href.endsWith('/') && url.pathname !== '/') href = href.slice(0, -1);\n    return href;\n  } catch {\n    return String(raw).trim();\n  }\n}\n\nfunction parseDate(value) {\n  if (!value) return null;\n  const date = new Date(value);\n  return Number.isNaN(date.getTime()) ? null : date;\n}\n\nfunction inferSource(item) {\n  if (item.source_name) return { source_name: item.source_name, feed_url: item.feed_url || '' };\n  const url = String(item.link || item.guid || item.id || item.feed_url || '');\n  let host = '';\n  try { host = new URL(url).hostname.replace(/^www\\./, ''); } catch { /* ignore */ }\n  const match = EXPECTED_FEEDS.find((feed) => feed.hostIncludes.some((h) => host.includes(h)));\n  if (match) return match;\n  return { source_name: host || 'Unknown source', feed_url: item.feed_url || '' };\n}\n\nfunction extractItem(raw) {\n  const title = stripHtml(raw.title || '');\n  const url = canonUrl(raw.link || raw.guid || raw.id || '');\n  const published = parseDate(raw.isoDate || raw.pubDate || raw.updated || raw.published || raw.date);\n  const chunks = [];\n  for (const rawChunk of [raw.contentSnippet, raw.content, raw.summary, raw.description, raw['content:encoded']]) {\n    const chunk = stripHtml(rawChunk);\n    if (!chunk) continue;\n    if (chunks.some((existing) => existing === chunk || existing.includes(chunk))) continue;\n    // If the new chunk is a longer version of an earlier one, replace it.\n    const idx = chunks.findIndex((existing) => chunk.includes(existing));\n    if (idx >= 0) chunks[idx] = chunk;\n    else chunks.push(chunk);\n  }\n  const content = chunks.join(' ').slice(0, 8000);\n  return { title, url, published, content };\n}\n\nconst feedHealthMap = new Map(EXPECTED_FEEDS.map((f) => [f.source_name, {\n  source_name: f.source_name,\n  feed_url: f.feed_url,\n  status: 'no_items',\n  item_count: 0,\n  error: null,\n}]));\n\nconst incoming = $input.all().map((row) => row.json);\nconst kept = [];\nconst seen = new Set();\nlet droppedNoUrlOrTitle = 0;\nlet droppedOutsideWindow = 0;\nlet droppedDuplicate = 0;\nlet droppedUndated = 0;\n\nfor (const raw of incoming) {\n  const inferred = inferSource(raw);\n  const health = feedHealthMap.get(inferred.source_name) || {\n    source_name: inferred.source_name,\n    feed_url: inferred.feed_url,\n    status: 'ok',\n    item_count: 0,\n    error: null,\n  };\n\n  const looksLikeError = Boolean(raw.error) || Boolean(raw.message && !raw.title && !raw.link);\n  if (looksLikeError) {\n    health.status = 'error';\n    health.error = stripHtml(raw.error?.message || raw.error || raw.message || 'Feed request failed');\n    feedHealthMap.set(health.source_name, health);\n    continue;\n  }\n\n  const item = extractItem(raw);\n  if (!item.url || !item.title) {\n    droppedNoUrlOrTitle += 1;\n    continue;\n  }\n  if (!item.published) {\n    droppedUndated += 1;\n    continue;\n  }\n  if (item.published.getTime() < cutoffMs) {\n    droppedOutsideWindow += 1;\n    continue;\n  }\n  if (seen.has(item.url)) {\n    droppedDuplicate += 1;\n    continue;\n  }\n  seen.add(item.url);\n\n  health.item_count += 1;\n  if (health.status !== 'error') health.status = 'ok';\n  feedHealthMap.set(health.source_name, health);\n\n  kept.push({\n    title: item.title,\n    url: item.url,\n    published: item.published.toISOString(),\n    content: item.content,\n    source_name: inferred.source_name,\n    feed_url: inferred.feed_url || health.feed_url,\n  });\n}\n\nkept.sort((a, b) => String(b.published).localeCompare(String(a.published)));\n\nconst generatedAt = new Date().toISOString();\n\nreturn [{\n  json: {\n    generated_at: generatedAt,\n    timezone: 'Europe/Paris',\n    lookback_hours: LOOKBACK_HOURS,\n    cutoff_iso: new Date(cutoffMs).toISOString(),\n    feed_health: [...feedHealthMap.values()],\n    stats: {\n      incoming: incoming.length,\n      kept: kept.length,\n      dropped_no_url_or_title: droppedNoUrlOrTitle,\n      dropped_undated: droppedUndated,\n      dropped_outside_window: droppedOutsideWindow,\n      dropped_duplicate: droppedDuplicate,\n    },\n    items: kept,\n  },\n}];\n"
+      },
+      "id": "3e41bba7-512a-5774-899b-12fb900bc19a",
+      "name": "Code · Normalize, dedupe & 48h window",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "/**\n * Keyword-score every item in the 48h window, always keep official blog\n * posts, and only promote the highest-scoring arXiv papers up to a cap.\n */\nconst MAX_OFFICIAL = 20;\nconst MAX_ARXIV = 5;\nconst MAX_TOTAL = 16;\nconst MIN_ARXIV_SCORE = 3;\n\nconst KEYWORDS = [\n  { label: 'openai', weight: 5, re: /\\b(gpt-?\\d|chatgpt|openai)\\b/i },\n  { label: 'anthropic', weight: 5, re: /\\b(claude|anthropic)\\b/i },\n  { label: 'google', weight: 5, re: /\\b(gemini|deepmind|antigravity|genie)\\b/i },\n  { label: 'huggingface', weight: 3, re: /\\b(hugging\\s?face|transformers|huggingface)\\b/i },\n  { label: 'markets', weight: 4, re: /\\b(ipo|offering|nasdaq|placement)\\b/i },\n  { label: 'agents', weight: 3, re: /\\b(agent|agents|agentic|multi-agent)\\b/i },\n  { label: 'eval', weight: 3, re: /\\b(benchmark|eval(?:uation)?|leaderboard|swe-bench)\\b/i },\n  { label: 'safety', weight: 3, re: /\\b(safety|alignment|safeguard|governance)\\b/i },\n  { label: 'release', weight: 2, re: /\\b(release|launches|introducing|available now|is now available)\\b/i },\n  { label: 'research', weight: 2, re: /\\b(research|paper|preprint|arxiv)\\b/i },\n  { label: 'model', weight: 1, re: /\\b(api|model|llm|reasoning|multimodal)\\b/i },\n];\n\nconst payload = $input.first().json;\nconst items = Array.isArray(payload.items) ? payload.items : [];\n\nfunction scoreItem(item) {\n  const text = `${item.title || ''}\\n${item.content || ''}`;\n  const matched = [];\n  let score = 0;\n  for (const keyword of KEYWORDS) {\n    if (keyword.re.test(text)) {\n      score += keyword.weight;\n      matched.push(keyword.label);\n    }\n  }\n  const isArxiv = String(item.source_name || '').toLowerCase().includes('arxiv');\n  if (!isArxiv) score += 2; // slight official-blog prior\n  return { ...item, score, matched_keywords: matched, is_arxiv: isArxiv };\n}\n\nconst scored = items.map(scoreItem);\nconst official = scored\n  .filter((item) => !item.is_arxiv)\n  .sort((a, b) => b.score - a.score || String(b.published).localeCompare(String(a.published)))\n  .slice(0, MAX_OFFICIAL);\nconst arxiv = scored\n  .filter((item) => item.is_arxiv && item.score >= MIN_ARXIV_SCORE)\n  .sort((a, b) => b.score - a.score || String(b.published).localeCompare(String(a.published)))\n  .slice(0, MAX_ARXIV);\n\n// Official posts in the window come first, then the best arXiv papers, up to MAX_TOTAL.\nconst arxivSlots = Math.max(0, MAX_TOTAL - official.length);\nconst combined = [...official, ...arxiv.slice(0, arxivSlots)];\n\nreturn [{\n  json: {\n    ...payload,\n    items: scored,\n    candidates: combined,\n    ranking: {\n      official_kept: official.length,\n      arxiv_kept: arxiv.length,\n      candidates: combined.length,\n      min_arxiv_score: MIN_ARXIV_SCORE,\n      max_total: MAX_TOTAL,\n    },\n  },\n}];\n"
+      },
+      "id": "b658303c-b230-533d-993e-b0cde74abdd7",
+      "name": "Code · Keyword score & rank",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 4. LLM, with a safe fallback\n\nIf `OPENAI_API_KEY` is set, one OpenAI-compatible HTTP request extracts facts and a post angle as **JSON**.\n\nThe prompt forbids invented figures and requires the original `source_url`.\n\nIf the key is missing or the call fails, the workflow **still builds a digest** from source titles and snippets.",
+        "width": 520,
+        "height": 220,
+        "color": 3
+      },
+      "id": "a5822e87-b8b6-595b-b553-0b34ef783668",
+      "name": "Note · LLM + fallback",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "/**\n * Build a single OpenAI-compatible chat request for every ranked candidate.\n * The model is forced to return JSON and to reuse the provided source URLs.\n * has_llm_key is false when OPENAI_API_KEY is unset, which skips the HTTP node.\n */\nconst payload = $input.first().json;\nfunction readEnv(name, fallback) {\n  try {\n    const bag = (typeof $env !== 'undefined') ? $env : {};\n    const value = bag[name];\n    if (value == null || value === '') return fallback == null ? '' : fallback;\n    return String(value);\n  } catch {\n    return fallback == null ? '' : fallback;\n  }\n}\n\nconst apiKey = readEnv('OPENAI_API_KEY', '').trim();\nconst model = readEnv('OPENAI_MODEL', 'gpt-4o-mini').trim() || 'gpt-4o-mini';\nconst baseUrl = readEnv('OPENAI_BASE_URL', 'https://api.openai.com/v1').replace(/\\/$/, '');\n\nconst SYSTEM = [\n  'You extract verifiable facts from official AI announcements and propose one post angle per article.',\n  'Return a JSON object of the form {\"ideas\":[...]} and nothing else.',\n  'Each idea MUST use this shape:',\n  '{\"title\":string,\"source_url\":string,\"source_name\":string,\"published\":string,\"facts\":string[],\"post_angle\":string,\"confidence\":\"high\"|\"medium\"|\"low\"}',\n  'Rules:',\n  '- Copy source_url exactly as provided. Do not invent, shorten, or replace it.',\n  '- Facts must be supported by the provided source text. Prefer close paraphrase over flourish.',\n  '- Never invent figures, dates, names, product versions, or quotes.',\n  '- If a number does not appear in the source text, do not use it.',\n  '- If the source is thin, write fewer facts and set confidence to low.',\n  '- post_angle is one sharp editorial angle, not a summary and not a published post.',\n  '- Do not mention any agent, assistant, or tool by a personal name.',\n].join('\\n');\n\nconst articles = (payload.candidates || []).map((item) => ({\n  title: item.title,\n  source_url: item.url,\n  source_name: item.source_name,\n  published: item.published,\n  source_text: String(item.content || '').slice(0, 4000),\n  score: item.score,\n  matched_keywords: item.matched_keywords,\n}));\n\nconst llmRequest = {\n  model,\n  temperature: 0,\n  response_format: { type: 'json_object' },\n  messages: [\n    { role: 'system', content: SYSTEM },\n    {\n      role: 'user',\n      content: `Extract facts and propose post angles for these ${articles.length} articles:\\n${JSON.stringify({ articles }, null, 2)}`,\n    },\n  ],\n};\n\nreturn [{\n  json: {\n    ...payload,\n    has_llm_key: apiKey.length > 0,\n    llm_model: model,\n    llm_url: `${baseUrl}/chat/completions`,\n    llm_request: llmRequest,\n  },\n}];\n"
+      },
+      "id": "614bbe90-c666-539e-9688-4efe053ea78b",
+      "name": "Code · Prepare LLM request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "4d622eae-9569-53a2-ba0b-6d5d94833f50",
+              "leftValue": "={{ $json.has_llm_key }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d1b7b4ab-2803-56ec-8301-09897de90b97",
+      "name": "IF · LLM credential present",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1960,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.llm_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.OPENAI_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.llm_request) }}",
+        "options": {
+          "timeout": 120000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "27be50c0-eb17-5d50-9b6e-b99975bac2b3",
+      "name": "HTTP · LLM extract facts & angles",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2260,
+        120
+      ],
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {},
+      "id": "ace53f5e-a73e-5e2d-8b3e-2bcd8268164d",
+      "name": "NoOp · Skip LLM",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2260,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "append",
+        "numberInputs": 2,
+        "options": {}
+      },
+      "id": "2304410e-5cf4-50f9-ae9b-fac4ecc6da0a",
+      "name": "Merge · LLM or fallback",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        2560,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "/**\n * If the LLM returned valid JSON ideas, use them. Otherwise build a\n * conservative digest from the source titles and snippets only.\n * Facts in the fallback path are copied from the source text, never invented.\n *\n * After the HTTP node, n8n replaces the item with the API response, so this\n * node also re-reads the prepared payload from \"Code · Prepare LLM request\".\n */\nfunction firstSentences(text, max = 3) {\n  const clean = String(text || '').replace(/\\s+/g, ' ').trim();\n  if (!clean) return [];\n  const parts = clean.split(/(?<=[.?!])\\s+/).map((s) => s.trim()).filter((s) => s.length > 20);\n  const unique = [];\n  const seen = new Set();\n  for (const part of parts) {\n    const key = part.toLowerCase();\n    if (seen.has(key)) continue;\n    seen.add(key);\n    unique.push(part.length > 400 ? `${part.slice(0, 397)}...` : part);\n    if (unique.length >= max) break;\n  }\n  return unique;\n}\n\nfunction fallbackIdeas(candidates) {\n  return (candidates || []).map((item) => {\n    const facts = firstSentences(item.content);\n    if (facts.length === 0 && item.title) {\n      facts.push(`Official title: ${item.title}`);\n    }\n    return {\n      title: item.title,\n      source_url: item.url,\n      source_name: item.source_name,\n      published: item.published,\n      facts,\n      post_angle: 'Needs human review — the LLM path was skipped or failed. Draft an angle only from the facts below.',\n      confidence: 'low',\n      llm_used: false,\n      needs_review: true,\n      score: item.score,\n      matched_keywords: item.matched_keywords || [],\n    };\n  });\n}\n\nfunction pickCompletion(raw) {\n  if (!raw || typeof raw !== 'object') return raw;\n  if (raw.choices && raw.choices[0]) return raw.choices[0];\n  if (raw.body) {\n    const body = typeof raw.body === 'string' ? safeJson(raw.body) : raw.body;\n    return pickCompletion(body);\n  }\n  return raw;\n}\n\nfunction safeJson(text) {\n  if (text == null) return null;\n  if (typeof text === 'object') return text;\n  const str = String(text).trim();\n  try { return JSON.parse(str); } catch { /* continue */ }\n  const start = str.indexOf('{');\n  const end = str.lastIndexOf('}');\n  if (start >= 0 && end > start) {\n    try { return JSON.parse(str.slice(start, end + 1)); } catch { return null; }\n  }\n  return null;\n}\n\nfunction ideasFromLlm(raw) {\n  const choice = pickCompletion(raw);\n  if (!choice) return null;\n  const content = choice.message?.content || choice.content || choice;\n  const parsed = safeJson(content);\n  if (!parsed) return null;\n  const list = Array.isArray(parsed.ideas) ? parsed.ideas : (Array.isArray(parsed) ? parsed : null);\n  if (!list) return null;\n  return list.map((idea) => ({\n    title: idea.title || '',\n    source_url: idea.source_url || idea.url || '',\n    source_name: idea.source_name || '',\n    published: idea.published || '',\n    facts: Array.isArray(idea.facts) ? idea.facts.map((f) => String(f)) : [],\n    post_angle: idea.post_angle || idea.angle || '',\n    confidence: idea.confidence || 'medium',\n    llm_used: true,\n    needs_review: true,\n  }));\n}\n\nconst incoming = $input.first().json;\nlet prepared = incoming;\ntry {\n  if (typeof $ === 'function') {\n    const fromPrep = $('Code · Prepare LLM request').first().json;\n    if (fromPrep && Array.isArray(fromPrep.candidates)) prepared = fromPrep;\n  }\n} catch { /* running outside n8n, or the skip-LLM path already has candidates */ }\n\nif (!Array.isArray(prepared.candidates) && Array.isArray(incoming.candidates)) {\n  prepared = incoming;\n}\n\nconst httpLooksFailed = Boolean(incoming.error)\n  || (incoming.statusCode && Number(incoming.statusCode) >= 400);\nlet llmError = null;\nif (httpLooksFailed) {\n  llmError = incoming.error?.message || incoming.error || incoming.message || `HTTP ${incoming.statusCode}`;\n}\n\nlet ideas = null;\nlet llmUsed = false;\nconst shouldTryLlm = Boolean(prepared.has_llm_key) && (incoming !== prepared || incoming.choices || incoming.body);\nif (shouldTryLlm && !httpLooksFailed) {\n  try {\n    ideas = ideasFromLlm(incoming);\n    if (ideas && ideas.length) llmUsed = true;\n    else llmError = llmError || 'LLM response did not contain a usable ideas array';\n  } catch (err) {\n    llmError = err.message || String(err);\n  }\n}\n\nif (!llmUsed) {\n  ideas = fallbackIdeas(prepared.candidates || []);\n}\n\nreturn [{\n  json: {\n    generated_at: prepared.generated_at,\n    timezone: prepared.timezone || 'Europe/Paris',\n    lookback_hours: prepared.lookback_hours,\n    cutoff_iso: prepared.cutoff_iso,\n    feed_health: prepared.feed_health,\n    stats: prepared.stats,\n    ranking: prepared.ranking,\n    candidates: prepared.candidates,\n    has_llm_key: Boolean(prepared.has_llm_key),\n    llm_model: prepared.llm_model || null,\n    llm_used: llmUsed,\n    llm_error: llmError ? String(llmError) : null,\n    ideas,\n  },\n}];\n"
+      },
+      "id": "dd610c64-e294-5eb9-a914-315e2de6817f",
+      "name": "Code · Parse LLM or fallback",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2840,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 5. Validate, then write the digest\n\nAn idea is **rejected** if it has no known source URL, or if it uses a number that does not appear in the source text.\n\nAccepted ideas still carry `needs_review: true`. This workflow never publishes.",
+        "width": 480,
+        "height": 220,
+        "color": 2
+      },
+      "id": "8cd0e041-55a0-5974-abbe-c7ca03d06049",
+      "name": "Note · Validate & digest",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3080,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "/**\n * Reject any idea that has no known source URL, or that uses a number\n * which does not appear in the source title, snippet, URL or date.\n * Accepted ideas stay flagged needs_review — nothing is published here.\n */\nconst payload = $input.first().json;\nconst candidates = payload.candidates || [];\n\nfunction canonUrl(raw) {\n  if (!raw) return '';\n  try {\n    const url = new URL(String(raw).trim());\n    url.hash = '';\n    for (const key of [...url.searchParams.keys()]) {\n      if (key.toLowerCase().startsWith('utm_') || key === 'fbclid' || key === 'ref') {\n        url.searchParams.delete(key);\n      }\n    }\n    url.protocol = url.protocol === 'http:' ? 'https:' : url.protocol;\n    let href = url.toString();\n    if (href.endsWith('/') && url.pathname !== '/') href = href.slice(0, -1);\n    return href;\n  } catch {\n    return String(raw).trim().replace(/\\/$/, '');\n  }\n}\n\nconst byUrl = new Map();\nfor (const item of candidates) {\n  byUrl.set(canonUrl(item.url), item);\n}\n\nfunction extractNumberTokens(text) {\n  const matches = String(text || '').match(/\\d{1,3}(?:,\\d{3})+(?:\\.\\d+)?|\\d+\\.\\d+|\\d+/g) || [];\n  return matches;\n}\n\nfunction variantsOf(token) {\n  const raw = String(token);\n  const noComma = raw.replace(/,/g, '');\n  const asSet = new Set([raw, noComma]);\n  if (/^\\d+$/.test(noComma)) {\n    asSet.add(noComma);\n    // 1000 -> 1,000\n    asSet.add(noComma.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ','));\n  }\n  if (raw.includes('.')) {\n    const trimmed = raw.replace(/(\\.\\d*?)0+$/, '$1').replace(/\\.$/, '');\n    asSet.add(trimmed);\n  }\n  return [...asSet];\n}\n\nfunction numberInText(token, text) {\n  const haystack = String(text || '');\n  return variantsOf(token).some((variant) => haystack.includes(variant));\n}\n\nfunction allowedText(idea, source) {\n  const parts = [\n    idea.source_url,\n    idea.source_name,\n    idea.published,\n    idea.title,\n  ];\n  if (source) {\n    parts.push(source.title, source.content, source.url, source.published, source.source_name);\n  }\n  return parts.filter(Boolean).join('\\n');\n}\n\nconst accepted = [];\nconst rejected = [];\n\nfor (const idea of (payload.ideas || [])) {\n  const reasons = [];\n  const url = canonUrl(idea.source_url);\n  const source = byUrl.get(url);\n  if (!url) reasons.push('missing source_url');\n  else if (!source) reasons.push('source_url does not match a fetched item');\n\n  const haystack = allowedText(idea, source);\n  const claimed = [\n    ...(Array.isArray(idea.facts) ? idea.facts : []),\n    idea.post_angle || '',\n    idea.title || '',\n  ].join('\\n');\n\n  const seenNums = new Set();\n  for (const token of extractNumberTokens(claimed)) {\n    const key = token.replace(/,/g, '');\n    if (seenNums.has(key)) continue;\n    seenNums.add(key);\n    if (!numberInText(token, haystack)) {\n      reasons.push(`number ${token} was not found in the source text`);\n    }\n  }\n\n  const record = {\n    ...idea,\n    source_url: idea.source_url || '',\n    needs_review: true,\n    validation: reasons.length ? 'rejected' : 'accepted',\n    rejection_reasons: reasons,\n  };\n  if (source && !record.source_name) record.source_name = source.source_name;\n  if (source && !record.score) record.score = source.score;\n  if (source && !record.matched_keywords) record.matched_keywords = source.matched_keywords;\n  if (source && !record.published) record.published = source.published;\n  (reasons.length ? rejected : accepted).push(record);\n}\n\nreturn [{\n  json: {\n    ...payload,\n    accepted,\n    rejected,\n    ideas: accepted,\n    validation_stats: {\n      accepted: accepted.length,\n      rejected: rejected.length,\n    },\n  },\n}];\n"
+      },
+      "id": "5236fe4c-1d19-5ae3-bf17-18d674f91da1",
+      "name": "Code · Validate sources & figures",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3160,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "/**\n * Assemble a Markdown digest for human review. Every idea stays in\n * \"needs review\" — this workflow never publishes.\n */\nconst payload = $input.first().json;\n\nfunction readEnv(name, fallback) {\n  try {\n    const bag = (typeof $env !== 'undefined') ? $env : {};\n    const value = bag[name];\n    if (value == null || value === '') return fallback == null ? '' : fallback;\n    return String(value);\n  } catch {\n    return fallback == null ? '' : fallback;\n  }\n}\n\n\nfunction formatParis(iso) {\n  if (!iso) return '—';\n  const date = new Date(iso);\n  if (Number.isNaN(date.getTime())) return String(iso);\n  const parts = new Intl.DateTimeFormat('en-GB', {\n    timeZone: 'Europe/Paris',\n    year: 'numeric',\n    month: '2-digit',\n    day: '2-digit',\n    hour: '2-digit',\n    minute: '2-digit',\n    hour12: false,\n  }).formatToParts(date);\n  const get = (type) => parts.find((p) => p.type === type)?.value || '';\n  return `${get('year')}-${get('month')}-${get('day')} ${get('hour')}:${get('minute')} Europe/Paris`;\n}\n\nfunction bullet(items) {\n  if (!items || !items.length) return '- _None._';\n  return items.map((x) => `- ${x}`).join('\\n');\n}\n\nconst generatedAt = payload.generated_at || new Date().toISOString();\nconst llmStatus = payload.llm_used\n  ? `used (${payload.llm_model || 'model set in OPENAI_MODEL'})`\n  : (payload.has_llm_key ? 'failed, fallback used' : 'skipped (no OPENAI_API_KEY)');\n\nconst healthLines = (payload.feed_health || []).map((feed) => {\n  const name = feed.error\n    ? `${feed.source_name} (${String(feed.error).replace(/\\s+/g, ' ').slice(0, 120)})`\n    : feed.source_name;\n  return `| ${name} | ${feed.status} | ${feed.item_count} | ${feed.feed_url} |`;\n});\n\nfunction ideaBlock(idea, index) {\n  const facts = (idea.facts || []).map((f) => `- ${f}`).join('\\n') || '- _No extractable fact in the source snippet._';\n  const keywords = (idea.matched_keywords || []).join(', ') || '—';\n  const reasons = (idea.rejection_reasons || []).length\n    ? `\\n**Rejected because:** ${(idea.rejection_reasons || []).join('; ')}`\n    : '';\n  return [\n    `### ${index}. ${idea.title}`,\n    '',\n    `- **Source:** [${idea.source_name || 'source'}](${idea.source_url})`,\n    `- **Published:** ${formatParis(idea.published)}`,\n    `- **Score:** ${idea.score ?? '—'} (${keywords})`,\n    `- **Confidence:** ${idea.confidence || '—'}`,\n    `- **LLM used:** ${idea.llm_used ? 'yes' : 'no'}`,\n    `- **Status:** needs review${idea.validation === 'rejected' ? ' — rejected by validation' : ''}`,\n    '',\n    '**Facts (must come from the source):**',\n    facts,\n    '',\n    `**Proposed angle:** ${idea.post_angle || '_None._'}`,\n    reasons,\n  ].join('\\n');\n}\n\nconst accepted = payload.accepted || payload.ideas || [];\nconst rejected = payload.rejected || [];\nconst stats = payload.stats || {};\nconst ranking = payload.ranking || {};\n\nconst lines = [\n  '# AI Tech Watch — digest for human review',\n  '',\n  `Generated: **${formatParis(generatedAt)}**`,\n  `Lookback window: **${payload.lookback_hours || 48} hours** (cutoff ${formatParis(payload.cutoff_iso)})`,\n  `LLM: **${llmStatus}**`,\n  payload.llm_error ? `LLM error: ${payload.llm_error}` : null,\n  '',\n  '> Nothing in this digest is published automatically. Every item is flagged `needs_review`.',\n  '> Do not add figures that are not in the linked source. A human decides what, if anything, goes out.',\n  '',\n  '## Run statistics',\n  '',\n  `| Metric | Value |`,\n  `| --- | ---: |`,\n  `| Incoming feed items | ${stats.incoming ?? '—'} |`,\n  `| Kept in the ${payload.lookback_hours || 48}h window (deduped) | ${stats.kept ?? '—'} |`,\n  `| Dropped outside window | ${stats.dropped_outside_window ?? '—'} |`,\n  `| Dropped duplicates | ${stats.dropped_duplicate ?? '—'} |`,\n  `| Official posts kept | ${ranking.official_kept ?? '—'} |`,\n  `| arXiv papers kept | ${ranking.arxiv_kept ?? '—'} |`,\n  `| Candidates sent to LLM / fallback | ${ranking.candidates ?? accepted.length} |`,\n  `| Ideas accepted by validation | ${(payload.validation_stats && payload.validation_stats.accepted) ?? accepted.length} |`,\n  `| Ideas rejected by validation | ${(payload.validation_stats && payload.validation_stats.rejected) ?? rejected.length} |`,\n  '',\n  '## Feed health',\n  '',\n  '| Source | Status | Items in window | Feed URL |',\n  '| --- | --- | ---: | --- |',\n  ...(healthLines.length ? healthLines : ['| — | — | — | — |']),\n  '',\n  `## Ideas accepted for review (${accepted.length})`,\n  '',\n  accepted.length\n    ? accepted.map((idea, i) => ideaBlock(idea, i + 1)).join('\\n\\n')\n    : '_No idea passed validation in this run._',\n  '',\n  `## Rejected by validation (${rejected.length})`,\n  '',\n  rejected.length\n    ? rejected.map((idea, i) => ideaBlock(idea, i + 1)).join('\\n\\n')\n    : '_No idea was rejected._',\n  '',\n  '## What to do next',\n  '',\n  bullet([\n    'Read each source URL before you reuse a fact.',\n    'Rewrite the angle in your own voice if you decide to publish.',\n    'Leave rejected ideas out, or fix them against the source and re-run.',\n    'Optional Slack, Gmail and Sheets nodes stay off unless `ENABLE_NOTIFICATIONS=true` and credentials are set.',\n  ]),\n].filter((line) => line !== null);\n\nconst markdown = lines.join('\\n') + '\\n';\n\nreturn [{\n  json: {\n    generated_at: generatedAt,\n    timezone: 'Europe/Paris',\n    lookback_hours: payload.lookback_hours,\n    llm_used: payload.llm_used,\n    has_llm_key: payload.has_llm_key,\n    llm_error: payload.llm_error,\n    needs_review: true,\n    feed_health: payload.feed_health,\n    stats: payload.stats,\n    ranking: payload.ranking,\n    validation_stats: payload.validation_stats,\n    accepted_count: accepted.length,\n    rejected_count: rejected.length,\n    accepted,\n    rejected,\n    markdown,\n    digest_filename: `ai-tech-watch-${formatParis(generatedAt).slice(0, 10)}.md`,\n    digest_path: readEnv('DIGEST_PATH', '/tmp/ai-tech-watch-digest.md'),\n    notifications_enabled: readEnv('ENABLE_NOTIFICATIONS', 'false') === 'true',\n  },\n}];\n"
+      },
+      "id": "49bb4eaa-409d-509c-81c4-79b380193031",
+      "name": "Code · Build Markdown digest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3440,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "markdown",
+        "binaryPropertyName": "data",
+        "options": {
+          "fileName": "={{ $json.digest_filename || 'ai-tech-watch-digest.md' }}",
+          "encoding": "utf8"
+        }
+      },
+      "id": "1a88d064-50b0-5391-95f7-b99abb5a4a22",
+      "name": "Convert · Digest to file",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        3720,
+        80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $json.digest_path || '/tmp/ai-tech-watch-digest.md' }}",
+        "dataPropertyName": "data",
+        "options": {
+          "append": false
+        }
+      },
+      "id": "e5bac2c6-3f5a-5dbc-9f3f-b9bc93bf4072",
+      "name": "Write · Digest to disk",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        4000,
+        80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## 6. Human review, optional notifications\n\nThe digest is the approval step: every idea is flagged **needs review**.\n\nA Wait/form node is not used here, so a CLI run can finish. Add one later if you want in-app approval.\n\nSlack, Gmail and Sheets sit behind `ENABLE_NOTIFICATIONS=true` and use **placeholder credentials**. They stay off by default.",
+        "width": 520,
+        "height": 220,
+        "color": 7
+      },
+      "id": "6ef68c0b-d00c-506e-bd96-4b9253eabcbe",
+      "name": "Note · Human review & notify",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4240,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "3ac5d36b-07fd-50f8-964b-309a95c52160",
+              "leftValue": "={{ $json.notifications_enabled }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "52acc655-7462-58ce-8bfe-38361b8b1f19",
+      "name": "IF · Notifications enabled",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        4280,
+        280
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cb8c45c3-b1e2-571e-990a-7cfcf462a3b2",
+      "name": "NoOp · Notifications off",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        4600,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0PLACEHOLDER",
+          "mode": "id"
+        },
+        "text": "={{ $json.markdown || 'AI Tech Watch digest is ready for review.' }}",
+        "otherOptions": {}
+      },
+      "id": "9087ffaf-92f9-5558-bc8f-43f2925a0488",
+      "name": "Slack · Post digest (optional)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        4600,
+        40
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "you@example.com",
+        "subject": "AI Tech Watch digest — needs review",
+        "message": "={{ $json.markdown || 'The digest is ready for review.' }}",
+        "options": {}
+      },
+      "id": "448542b4-5888-5fa4-8bea-8100eaff32f3",
+      "name": "Gmail · Email digest (optional)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        4600,
+        200
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "SHEETS_DOCUMENT_PLACEHOLDER",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "GID_PLACEHOLDER",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "options": {}
+      },
+      "id": "20f29e46-9be1-59cc-aab2-0b474e2d3b32",
+      "name": "Sheets · Append ideas (optional)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        4600,
+        360
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## 7. Error handler\n\nIn **Workflow Settings**, set *Error workflow* to this same workflow so the Error Trigger receives unhandled failures.\n\nFeed and LLM nodes already continue on failure and degrade to a source-only digest. This path is for everything else.\n\nIt writes a short incident note. It never publishes.",
+        "width": 700,
+        "height": 260,
+        "color": 1
+      },
+      "id": "d890c77c-49de-5f1d-b0ea-30fbf37205ba",
+      "name": "Note · Error handler",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        760
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "eeed54d4-f0bd-5ac3-a23d-33db095efc95",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        80,
+        1060
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "/**\n * Turn an n8n Error Trigger payload into a short Markdown incident note.\n */\nconst raw = $input.first().json;\n\nfunction readEnv(name, fallback) {\n  try {\n    const bag = (typeof $env !== 'undefined') ? $env : {};\n    const value = bag[name];\n    if (value == null || value === '') return fallback == null ? '' : fallback;\n    return String(value);\n  } catch {\n    return fallback == null ? '' : fallback;\n  }\n}\n\nconst now = new Date().toISOString();\n\nfunction formatParis(iso) {\n  const date = new Date(iso || Date.now());\n  if (Number.isNaN(date.getTime())) return String(iso);\n  return new Intl.DateTimeFormat('en-GB', {\n    timeZone: 'Europe/Paris',\n    year: 'numeric', month: '2-digit', day: '2-digit',\n    hour: '2-digit', minute: '2-digit', second: '2-digit',\n    hour12: false,\n  }).format(date).replace(',', '') + ' Europe/Paris';\n}\n\nconst execution = raw.execution || raw;\nconst workflow = raw.workflow || {};\nconst error = execution.error || raw.error || raw;\nconst message = error.message || error.description || JSON.stringify(error);\nconst node = error.node || execution.lastNodeExecuted || 'unknown node';\n\nconst markdown = [\n  '# AI Tech Watch — execution error',\n  '',\n  `Recorded: **${formatParis(now)}**`,\n  `Workflow: **${workflow.name || 'AI Tech Watch'}**`,\n  `Failed node: **${node}**`,\n  '',\n  '## Message',\n  '',\n  '```',\n  String(message).slice(0, 2000),\n  '```',\n  '',\n  'The official-feed requests are fail-open (`onError` continues the run).',\n  'This note is for unhandled errors. Nothing was published.',\n  '',\n].join('\\n');\n\nreturn [{\n  json: {\n    generated_at: now,\n    needs_review: true,\n    error_message: String(message).slice(0, 2000),\n    failed_node: node,\n    markdown,\n    digest_path: readEnv('ERROR_DIGEST_PATH', '/tmp/ai-tech-watch-error.md'),\n  },\n}];\n"
+      },
+      "id": "d47ed611-c8bd-5b6f-a254-a5f2ec322f29",
+      "name": "Code · Format error report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        1060
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "markdown",
+        "binaryPropertyName": "data",
+        "options": {
+          "fileName": "ai-tech-watch-error.md",
+          "encoding": "utf8"
+        }
+      },
+      "id": "577fbb42-269a-5a8c-a777-355b034323b3",
+      "name": "Convert · Error note to file",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        640,
+        1060
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $json.digest_path || '/tmp/ai-tech-watch-error.md' }}",
+        "dataPropertyName": "data",
+        "options": {
+          "append": false
+        }
+      },
+      "id": "7b07713a-ac77-59dc-82dd-2abe81c16278",
+      "name": "Write · Error note to disk",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        920,
+        1060
+      ],
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Trigger · Schedule (daily 07:00 Paris)": {
+      "main": [
+        [
+          {
+            "node": "RSS · OpenAI News",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS · Google DeepMind",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS · Google AI Blog",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS · Hugging Face Blog",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS · arXiv cs.AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger · Manual": {
+      "main": [
+        [
+          {
+            "node": "RSS · OpenAI News",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS · Google DeepMind",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS · Google AI Blog",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS · Hugging Face Blog",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS · arXiv cs.AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS · OpenAI News": {
+      "main": [
+        [
+          {
+            "node": "Tag · OpenAI News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS · Google DeepMind": {
+      "main": [
+        [
+          {
+            "node": "Tag · Google DeepMind",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS · Google AI Blog": {
+      "main": [
+        [
+          {
+            "node": "Tag · Google AI Blog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS · Hugging Face Blog": {
+      "main": [
+        [
+          {
+            "node": "Tag · Hugging Face Blog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS · arXiv cs.AI": {
+      "main": [
+        [
+          {
+            "node": "Tag · arXiv cs.AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag · OpenAI News": {
+      "main": [
+        [
+          {
+            "node": "Merge · All feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag · Google DeepMind": {
+      "main": [
+        [
+          {
+            "node": "Merge · All feeds",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Tag · Google AI Blog": {
+      "main": [
+        [
+          {
+            "node": "Merge · All feeds",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Tag · Hugging Face Blog": {
+      "main": [
+        [
+          {
+            "node": "Merge · All feeds",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Tag · arXiv cs.AI": {
+      "main": [
+        [
+          {
+            "node": "Merge · All feeds",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Merge · All feeds": {
+      "main": [
+        [
+          {
+            "node": "Code · Normalize, dedupe & 48h window",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code · Normalize, dedupe & 48h window": {
+      "main": [
+        [
+          {
+            "node": "Code · Keyword score & rank",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code · Keyword score & rank": {
+      "main": [
+        [
+          {
+            "node": "Code · Prepare LLM request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code · Prepare LLM request": {
+      "main": [
+        [
+          {
+            "node": "IF · LLM credential present",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF · LLM credential present": {
+      "main": [
+        [
+          {
+            "node": "HTTP · LLM extract facts & angles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "NoOp · Skip LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP · LLM extract facts & angles": {
+      "main": [
+        [
+          {
+            "node": "Merge · LLM or fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NoOp · Skip LLM": {
+      "main": [
+        [
+          {
+            "node": "Merge · LLM or fallback",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge · LLM or fallback": {
+      "main": [
+        [
+          {
+            "node": "Code · Parse LLM or fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code · Parse LLM or fallback": {
+      "main": [
+        [
+          {
+            "node": "Code · Validate sources & figures",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code · Validate sources & figures": {
+      "main": [
+        [
+          {
+            "node": "Code · Build Markdown digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code · Build Markdown digest": {
+      "main": [
+        [
+          {
+            "node": "Convert · Digest to file",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "IF · Notifications enabled",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert · Digest to file": {
+      "main": [
+        [
+          {
+            "node": "Write · Digest to disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF · Notifications enabled": {
+      "main": [
+        [
+          {
+            "node": "Slack · Post digest (optional)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "NoOp · Notifications off",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack · Post digest (optional)": {
+      "main": [
+        [
+          {
+            "node": "Gmail · Email digest (optional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail · Email digest (optional)": {
+      "main": [
+        [
+          {
+            "node": "Sheets · Append ideas (optional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code · Format error report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code · Format error report": {
+      "main": [
+        [
+          {
+            "node": "Convert · Error note to file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert · Error note to file": {
+      "main": [
+        [
+          {
+            "node": "Write · Error note to disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "timezone": "Europe/Paris",
+    "errorWorkflow": ""
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "ai-tech-watch"
+    },
+    {
+      "name": "n8n"
+    },
+    {
+      "name": "editorial"
+    }
+  ]
+}
